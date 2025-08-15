@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 
 from gigachat import GigaChat
 from gigachat.exceptions import ResponseError
@@ -8,21 +7,10 @@ from httpx import ConnectError
 
 from exceptions import APIRequestError
 
-PAYLOAD = Chat(
-    messages=[
-        Messages(
-            role=MessagesRole.SYSTEM,
-            content=Path("system_prompt.md").read_text(encoding="utf-8"),
-        ),
-    ],
-    temperature=0.5,
-    max_tokens=200,
-)
-
 API_REQUEST_ERROR_MESSAGE = "Ошибка запроса к API LLM: {error}"
 
 
-async def get_answer(user_request: str, payload: Chat = PAYLOAD) -> str:
+async def get_answer(user_request: str, payload: Chat) -> str:
     """Receives a response from the LLM to the user's request."""
     async with GigaChat() as giga:
         payload.messages.append(
@@ -38,4 +26,5 @@ async def get_answer(user_request: str, payload: Chat = PAYLOAD) -> str:
             logging.error(error_message, exc_info=True)
             raise APIRequestError(error_message) from error
 
-        return response.choices[0].message.content
+        choice, *_ = response.choices
+        return choice.message.content
