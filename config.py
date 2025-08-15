@@ -5,7 +5,7 @@ LOG_FORMAT = '"%(asctime)s - [%(levelname)s] - %(message)s"'
 
 
 def configure_logging():
-    """Конфигурирует логгер."""
+    """Configures the logger."""
     logging.basicConfig(
         datefmt=DATETIME_FORMAT,
         format=LOG_FORMAT,

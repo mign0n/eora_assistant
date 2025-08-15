@@ -28,7 +28,7 @@ dp = Dispatcher()
 
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
-    """Receives messages with `/start` command."""
+    """Handles the `/start` command from user, greeting him."""
     await message.answer(
         WELCOME_MESSAGE.format(name=html.bold(message.from_user.full_name)),
     )
@@ -36,7 +36,7 @@ async def command_start_handler(message: Message) -> None:
 
 @dp.message()
 async def ai_answer_handler(message: Message) -> None:
-    """Receives answer from AI."""
+    """Handles message from user, sends a response from the LLM."""
     try:
         await message.reply(await get_answer(message.text or ""))
     except APIRequestError:
